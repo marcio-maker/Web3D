@@ -1,0 +1,892 @@
+/* style.css */
+
+/* Root variables for consistent theming */
+:root {
+  --primary: #8b5a2b; /* Original primary for accents */
+  --secondary: #6d4a2b; /* Original secondary */
+  --light: #e0e0e0; /* Softer light for backgrounds */
+  --dark: #1a1a1a; /* Darker tone for text and elements */
+  --accent: #4fc3f7; /* Original accent blue for highlights */
+  --background-dark: #0a0a0a; /* Very dark background for futuristic feel */
+  --text-light: #f0f0f0; /* Light text for dark backgrounds */
+  --border-glow: rgba(79, 195, 247, 0.5); /* Accent glow */
+}
+
+/* Global reset for consistent styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body styles - futuristic fonts and colors */
+body {
+  font-family: 'Rajdhani', sans-serif; /* Modern body font */
+  color: var(--text-light); /* Light text by default for dark background */
+  line-height: 1.8; /* Improved readability */
+  background-color: var(--background-dark); /* Dark background */
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  -webkit-font-smoothing: antialiased; /* Smoother font rendering */
+  -moz-osx-font-smoothing: grayscale;
+  position: relative; /* Needed for canvas positioning */
+}
+
+/* Three.js Canvas Styles */
+#mood-canvas {
+  position: fixed; /* Fixed position to cover the whole viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Behind all content */
+  pointer-events: none; /* Allows clicks to pass through to content */
+}
+
+/* Hero section styles - Prominent and futuristic */
+.hero {
+  text-align: center;
+  padding: 8rem 1rem 4rem; /* More vertical padding */
+  color: var(--text-light);
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0)); /* Subtle gradient fade */
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  transition: transform 1s ease;
+}
+
+.hero h1 {
+  font-family: 'Orbitron', sans-serif; /* Futuristic font for titles */
+  font-size: 4rem; /* Larger font size */
+  margin-bottom: 1rem;
+  text-shadow: 0 0 15px var(--accent); /* Subtle glow effect */
+}
+
+.hero p {
+  font-size: 1.4rem; /* Larger paragraph text */
+  max-width: 800px;
+  margin: 0 auto;
+  opacity: 0.9;
+}
+
+/* Mood selector styles - Integrated with canvas background */
+#mood-selector {
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 1.1rem;
+  background: rgba(0, 0, 0, 0.4); /* Semi-transparent background */
+  border-bottom: 1px solid rgba(79, 195, 247, 0.2); /* Accent border */
+  position: relative;
+  z-index: 10;
+  color: var(--text-light); /* Default text color */
+}
+
+/* Text color classes for mood selector to ensure strong contrast with background */
+#mood-selector.calmo-text { color: #0a0a0a; text-shadow: 0 1px 4px #fff, 0 0 2px #c2e9fb; }
+#mood-selector.criativo-text { color: #222; text-shadow: 0 1px 4px #fff, 0 0 2px #fbc2eb; }
+#mood-selector.cansado-text { color: #fff; text-shadow: 0 1px 4px #000, 0 0 2px #434343; }
+#mood-selector.feliz-text { color: #1a1a1a; text-shadow: 0 1px 4px #fff, 0 0 2px #fddb92; }
+#mood-selector.reflexivo-text { color: #fff; text-shadow: 0 1px 4px #222, 0 0 2px #355c7d; }
+
+#mood-selector select {
+    margin-top: 10px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 1rem;
+    border: 1.5px solid var(--accent);
+    outline: none;
+    background: rgba(10, 10, 10, 0.85); /* Darker for contrast */
+    color: var(--text-light);
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(79,195,247,0.08);
+}
+
+#mood-selector select:hover, 
+#mood-selector select:focus {
+    background: rgba(79, 195, 247, 0.15);
+    border-color: var(--primary);
+    color: var(--accent);
+}
+
+/* Section base styles */
+section {
+  padding: 2rem 1rem; /* More generous padding */
+  position: relative;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent section background */
+  margin-bottom: 1rem; /* Alterado para 1rem para diminuir o espaçamento */
+  border-bottom: 1px solid rgba(79, 195, 247, 0.1); /* Subtle separator */
+  transform-style: preserve-3d; /* Enable 3D transformations for children */
+}
+
+/* Section Titles */
+.section-title {
+  text-align: center;
+  font-size: 3rem; /* Larger titles */
+  margin-bottom: 4rem; /* More space below title */
+  color: var(--accent); /* Accent color for titles */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0; /* Changed to 0 for initial state for animation */
+  transform: translateY(20px); /* Moved up for initial state for animation */
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: var(--primary);
+  margin: 15px auto 0;
+  border-radius: 2px;
+}
+
+.sobre-card {
+  width: 100%;
+  max-width: 900px;
+  margin: auto;
+  perspective: 1500px;
+}
+
+.sobre-card-inner {
+  position: relative;
+  width: 100%;
+  transition: transform 1.2s ease;
+  transform-style: preserve-3d;
+}
+
+.sobre-front,
+.sobre-back {
+  position: absolute;
+  width: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.sobre-back {
+  transform: rotateY(180deg);
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.sobre-foto {
+  max-width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 0 25px var(--accent);
+}
+
+
+/* Button group for project cards */
+.button-group {
+  display: flex;
+  gap: 12px; /* Increased gap */
+  margin-top: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  font-family: 'Rajdhani', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-small {
+  padding: 8px 18px; /* Larger padding */
+  font-size: 0.85rem;
+  background-color: var(--accent);
+  color: var(--dark); /* Dark text on accent button */
+  border: 1px solid var(--accent);
+}
+
+.btn-small:hover {
+  background-color: transparent;
+  color: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 15px var(--accent); /* Glow on hover */
+}
+
+.btn-small.secondary {
+  background-color: transparent;
+  color: var(--text-light);
+  border: 1px solid var(--text-light);
+}
+
+.btn-small.secondary:hover {
+  background-color: var(--secondary);
+  color: var(--text-light);
+  border-color: var(--secondary);
+  box-shadow: 0 0 15px var(--secondary);
+}
+
+/* Terminal Effect - Modernized */
+.terminal {
+  background: rgba(0, 0, 0, 0.9); /* Darker, more opaque */
+  color: #0f0; /* Classic green terminal text */
+  padding: 3rem; /* More padding */
+  border-radius: 10px; /* More rounded */
+  max-width: 900px; /* Wider terminal */
+  margin: 2rem auto;
+  box-shadow: 0 0 30px rgba(0, 255, 0, 0.2), inset 0 0 10px rgba(0, 255, 0, 0.1); /* More pronounced glow */
+  position: relative;
+  overflow: hidden;
+  z-index: 10;
+  border: 1px solid #0f0; /* Green border */
+  opacity: 0; /* Initial state for animation */
+  transform: translateY(30px); /* Initial state for animation */
+}
+
+.terminal::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px; /* Taller header */
+  background: #333;
+  border-radius: 10px 10px 0 0;
+  box-shadow: inset 0 5px 10px rgba(0,0,0,0.3);
+}
+
+.terminal::after {
+  content: "▶ user@machine:~$"; /* More realistic prompt */
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  color: #0f0;
+  font-family: 'Courier New', monospace;
+  font-size: 1.1rem;
+}
+
+.terminal-line {
+  margin-bottom: 1.2rem;
+  opacity: 0; /* Changed to 0 for initial state for animation */
+  padding-left: 20px; /* Space for prompt */
+  font-family: 'Courier New', monospace;
+  white-space: pre-wrap; /* Preserve whitespace and wrap text */
+}
+
+.cursor {
+  display: inline-block;
+  width: 12px; /* Slightly larger cursor */
+  height: 24px;
+  background: #0f0;
+  animation: blink 1s infinite step-end; /* Use step-end for sharp blink */
+  vertical-align: middle;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* sr-only for accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  border: 0;
+}
+
+/* 3D Cards - Enhanced Styling */
+.projects-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem; /* Increased gap */
+  justify-content: center;
+  padding: 3rem 1rem;
+  position: relative;
+  z-index: 10;
+}
+
+.project-card {
+  width: 320px; /* Slightly larger cards */
+  height: 320px;
+  perspective: 1200px; /* Stronger perspective for tilt effect */
+  cursor: pointer;
+  opacity: 0; /* Initial state for animation */
+  transform: scale(0.9) translateY(20px); /* Initial state for animation */
+}
+
+.project-card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* More playful spring effect */
+  transform-style: preserve-3d;
+}
+
+.project-card:hover .project-card-inner {
+  transform: rotateY(180deg);
+}
+
+.project-card-front,
+.project-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background: var(--light); /* Lighter background for front */
+  border-radius: 20px; /* More rounded corners */
+  box-shadow: 0 15px 30px rgba(0,0,0,0.3), inset 0 0 10px rgba(255,255,255,0.1); /* Deeper shadow and inner glow */
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--dark); /* Dark text on light background */
+}
+
+.project-card-front {
+  z-index: 2;
+}
+
+.project-card-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(135deg, var(--dark), #333); /* Darker gradient for back */
+  color: var(--text-light);
+  padding: 1.5rem;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.3), inset 0 0 10px rgba(0,0,0,0.2);
+}
+
+.project-card-back h3 {
+  color: var(--accent); /* Accent title on back */
+  margin-bottom: 10px;
+}
+
+.project-image {
+  width: 100%;
+  height: 150px; /* Taller images */
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Skills Chart - Modernized */
+.skills-container {
+  max-width: 900px; /* Wider container */
+  margin: 0 auto;
+  padding: 2rem;
+  position: relative;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  opacity: 0; /* Initial state for animation */
+  transform: translateY(30px); /* Initial state for animation */
+}
+
+.skill-item {
+  margin-bottom: 2rem; /* More space between items */
+}
+
+.skill-name {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.8rem; /* More space below name */
+  font-size: 1.1rem;
+  color: var(--accent); /* Accent color for skill names */
+  font-family: 'Orbitron', sans-serif;
+}
+
+.skill-bar {
+  height: 25px; /* Taller bar */
+  background: #333; /* Darker background for bar */
+  border-radius: 12px; /* More rounded */
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+}
+
+.skill-progress {
+  height: 100%;
+  background: linear-gradient(to right, var(--primary), var(--accent)); /* Gradient fill */
+  width: 0;
+  border-radius: 12px;
+  transition: width 1s ease-out;
+  position: relative;
+}
+
+.skill-progress::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 20px;
+  background: rgba(255,255,255,0.2);
+  filter: blur(5px);
+  transform: translateX(100%);
+  animation: skill-shine 2s infinite;
+}
+
+@keyframes skill-shine {
+  0% { transform: translateX(-100%); }
+  60% { transform: translateX(100%); }
+  100% { transform: translateX(100%); }
+}
+
+
+/* Timeline - Modernized */
+.timeline {
+  position: relative;
+  max-width: 1000px; /* Wider timeline */
+  margin: 0 auto;
+  padding: 3rem 1rem;
+  z-index: 10;
+}
+
+.timeline::after {
+  content: '';
+  position: absolute;
+  width: 8px; /* Thicker line */
+  background: var(--primary);
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  margin-left: -4px;
+  border-radius: 4px;
+  box-shadow: 0 0 15px var(--primary); /* Glow on timeline line */
+}
+
+.timeline-item {
+  padding: 20px 50px; /* More padding */
+  position: relative;
+  width: 50%;
+  opacity: 0;
+  transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+.timeline-item:nth-child(odd) {
+  left: 0;
+  transform: translateX(-50px);
+}
+
+.timeline-item:nth-child(even) {
+  left: 50%;
+  transform: translateX(50px);
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  width: 20px; /* Larger circle */
+  height: 20px;
+  background: var(--accent);
+  border: 4px solid var(--background-dark); /* Dark border for contrast */
+  border-radius: 50%;
+  z-index: 1;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 0 15px var(--accent); /* Glow on circles */
+}
+
+.timeline-item:nth-child(odd)::before {
+  right: -10px; /* Position circle */
+}
+
+.timeline-item:nth-child(even)::before {
+  left: -10px; /* Position circle */
+}
+
+.timeline-content {
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.1); /* Slightly transparent white */
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  color: var(--text-light);
+  border: 1px solid rgba(79, 195, 247, 0.2); /* Accent border */
+  transition: all 0.3s ease;
+}
+
+.timeline-content:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-5px);
+}
+
+.timeline-content h3 {
+  font-family: 'Orbitron', sans-serif;
+  color: var(--primary);
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+/* Blueprint Form - APRIMORADO para 3D e Moderno */
+.blueprint-form {
+    max-width: 750px; /* Levemente mais largo para presença */
+    margin: 2.5rem auto; /* Mais espaçamento superior/inferior */
+    padding: 2rem; /* Mais padding interno */
+    background: linear-gradient(145deg, rgba(25, 25, 30, 0.9), rgba(15, 15, 20, 0.95)); /* Gradiente escuro para profundidade */
+    border: 1px solid rgba(79, 195, 247, 0.2); /* Borda sutil de acento */
+    border-radius: 20px; /* Mais arredondado */
+    position: relative;
+    z-index: 10;
+    box-shadow:
+        0 25px 50px rgba(0, 0, 0, 0.6), /* Sombra profunda */
+        0 0 80px rgba(79, 195, 247, 0.15); /* Grande brilho de acento */
+    overflow: hidden;
+    transition: all 0.4s ease-out; /* Transição suave para hover no formulário */
+    opacity: 0; /* Initial state for animation */
+    transform: translateY(50px); /* Initial state for animation */
+}
+
+/* Efeito de pseudo-borda e hover para o formulário */
+.blueprint-form::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 20px;
+    padding: 3px; /* Espessura do "borda" interna */
+    background: linear-gradient(45deg, var(--accent), var(--primary)); /* Gradiente para o efeito de borda */
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.1; /* Inicia sutil */
+    transition: opacity 0.4s ease-out;
+}
+
+.blueprint-form:hover::before {
+    opacity: 0.4; /* Aumenta a borda brilhante no hover */
+}
+
+
+.blueprint-form::after {
+    content: "CONECTE-SE"; /* Novo texto para o "cabeçalho" do formulário */
+    position: absolute;
+    top: -20px; /* Ajustado para melhor visualização */
+    left: 50%;
+    transform: translateX(-50%); /* Centraliza o texto */
+    background: var(--background-dark); /* Cor de fundo para o "cabeçalho" */
+    padding: 8px 25px; /* Mais padding */
+    color: var(--accent);
+    font-weight: bold;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem; /* Maior e mais impactante */
+    border-radius: 10px; /* Arredondado */
+    box-shadow: 0 5px 20px rgba(79, 195, 247, 0.2); /* Sombra para o "cabeçalho" */
+    letter-spacing: 2px;
+}
+
+.form-group {
+    margin-bottom: 2.5rem; /* Mais espaço entre os grupos */
+    position: relative;
+    /* Efeito de luz sutil nos grupos */
+    box-shadow: 0 0 10px rgba(79, 195, 247, 0.05); /* Brilho sutil ao redor do grupo */
+    border-radius: 8px; /* Arredondamento para o container do grupo */
+    padding-bottom: 5px; /* Espaço para a linha de foco */
+}
+
+.form-group::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px; /* Linha mais grossa */
+    background: linear-gradient(to right, var(--accent), var(--primary)); /* Gradiente para a linha de foco */
+    transform: scaleX(0);
+    transform-origin: center; /* Transforma do centro */
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out; /* Transição mais suave */
+    border-radius: 2px;
+    opacity: 0; /* Inicia invisível */
+}
+
+.form-group:focus-within::after {
+    transform: scaleX(1);
+    opacity: 1; /* Aparece ao focar */
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.8rem;
+    color: var(--accent);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.15rem; /* Levemente maior */
+    letter-spacing: 1.5px; /* Mais espaçamento entre letras */
+    text-shadow: 0 0 5px rgba(79, 195, 247, 0.3); /* Brilho suave no texto */
+    transition: color 0.3s ease;
+}
+
+.form-input {
+    width: 100%;
+    padding: 15px 18px; /* Mais padding para um campo mais "luxuoso" */
+    background: rgba(255, 255, 255, 0.08); /* Fundo sutilmente mais visível e transparente */
+    border: 1px solid rgba(79, 195, 247, 0.2); /* Borda mais definida mas suave */
+    border-radius: 8px; /* Mais arredondado */
+    font-family: 'Rajdhani', sans-serif; /* Fonte moderna para inputs */
+    font-size: 1.1rem;
+    color: var(--text-light);
+    outline: none;
+    transition: all 0.3s ease; /* Transição suave para foco */
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4); /* Sombra interna para profundidade */
+}
+
+.form-input:focus {
+    border-color: var(--primary); /* Cor da borda no foco */
+    box-shadow:
+        inset 0 0 15px rgba(79, 195, 247, 0.4), /* Brilho interno forte */
+        0 0 15px rgba(79, 195, 247, 0.2); /* Brilho externo suave */
+    background: rgba(255, 255, 255, 0.12); /* Fundo um pouco mais claro no foco */
+}
+
+/* Estilo para o Textarea */
+textarea.form-input {
+    resize: vertical; /* Permite redimensionar apenas verticalmente */
+    min-height: 120px; /* Altura mínima */
+}
+
+/* Botão de Envio - Mais Moderno e Interativo */
+.form-submit {
+    background: linear-gradient(45deg, var(--accent), var(--primary)); /* Gradiente no botão */
+    color: var(--dark); /* Cor do texto no botão */
+    border: none;
+    padding: 15px 30px; /* Mais padding para um botão maior */
+    border-radius: 10px; /* Mais arredondado */
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem; /* Texto maior no botão */
+    transition: all 0.4s ease-out; /* Transição mais suave e longa */
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    box-shadow: 0 8px 20px rgba(79, 195, 247, 0.3); /* Sombra para o botão */
+    /* Efeito de brilho sutil */
+    transform: perspective(1px) translateZ(0); /* Força aceleração de hardware */
+}
+
+.form-submit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2); /* Efeito de luz */
+    transform: skewX(-20deg);
+    transition: all 0.4s ease-out;
+}
+
+.form-submit:hover {
+    transform: translateY(-5px) scale(1.02); /* Leve levantamento e zoom */
+    box-shadow: 0 12px 25px rgba(79, 195, 247, 0.5); /* Sombra mais intensa no hover */
+}
+
+.form-submit:hover::before {
+    left: 100%; /* Desliza o brilho */
+}
+
+/* Social Media Section */
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem;
+    position: relative;
+    z-index: 10;
+    opacity: 0; /* Initial state for animation */
+    transform: translateY(30px); /* Initial state for animation */
+}
+
+
+/* Navigation dots */
+.nav-dots {
+  position: fixed;
+  right: 25px; /* Slightly more to the right */
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* More space between dots */
+  z-index: 100;
+}
+
+.nav-dot {
+  width: 15px; /* Larger dots */
+  height: 15px;
+  border-radius: 50%;
+  background: rgba(139, 90, 43, 0.4); /* Slightly more opaque default */
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 2px solid transparent; /* Subtle border */
+}
+
+.nav-dot.active {
+  background: var(--primary);
+  transform: scale(1.4); /* More pronounced active state */
+  border-color: var(--accent); /* Accent border for active dot */
+  box-shadow: 0 0 15px var(--accent); /* Glow for active dot */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 3rem;
+  }
+  .hero p {
+    font-size: 1rem;
+  }
+  .section-title {
+    font-size: 2rem;
+  }
+  .terminal {
+    padding: 2rem;
+  }
+  .timeline::after {
+    left: 20px;
+    margin-left: 0;
+  }
+  .timeline-item {
+    width: 100%;
+    padding-left: 50px;
+    padding-right: 10px;
+  }
+  .timeline-item:nth-child(odd),
+  .timeline-item:nth-child(even) {
+    left: 0;
+    transform: translateX(0);
+  }
+  .timeline-item:nth-child(odd)::before,
+  .timeline-item:nth-child(even)::before {
+    left: 10px;
+    right: auto;
+  }
+  .nav-dots {
+    display: none; /* Hide dots on small screens if desired, or adjust position */
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+  .section-title {
+    font-size: 1.8rem;
+  }
+  .project-card {
+    width: 100%;
+    height: auto; /* Adjust height for better fit on small screens */
+  }
+  .project-card-front, .project-card-back {
+    padding: 1rem;
+  }
+  .project-image {
+    height: 100px;
+  }
+  .form-submit {
+    width: 100%;
+  }
+}
+
+/* Humor fallback backgrounds (retained for humor) */
+body.calmo { background: linear-gradient(to right, #c2e9fb, #a1c4fd); color: #1a1a1a; }
+body.criativo { background: linear-gradient(to right, #fbc2eb, #a6c1ee); color: #1a1a1a; }
+body.cansado { background: linear-gradient(to right, #434343, #000000); color: #fff; }
+body.feliz { background: linear-gradient(to right, #fddb92, #d1fdff); color: #1a1a1a; }
+body.reflexivo { background: linear-gradient(to right, #355c7d, #6c5b7b, #c06c84); color: #fff; }
+
+
+/* Depoimentos (Testimonials) */
+.depoimentos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4rem 1rem;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    border-radius: 16px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    max-width: 900px;
+    margin: 3rem auto;
+    position: relative;
+    z-index: 10;
+}
+
+.depoimentos .section-title {
+    margin-bottom: 2.5rem;
+}
+
+.testimonials {
+    display: flex;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+
+.testimonial-item {
+    background: rgba(255,255,255,0.07);
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(79,195,247,0.10);
+    padding: 2rem 1.5rem;
+    max-width: 340px;
+    min-width: 260px;
+    color: var(--text-light);
+    font-style: italic;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid rgba(79,195,247,0.12);
+}
+
+.testimonial-item:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 8px 32px rgba(79,195,247,0.18);
+}
+
+.testimonial-item p {
+    margin-bottom: 1.2rem;
+    font-size: 1.1rem;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.testimonial-item span {
+    color: var(--accent);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+    .testimonials {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: center;
+    }
+    .testimonial-item {
+        max-width: 100%;
+        width: 100%;
+    }
+}
